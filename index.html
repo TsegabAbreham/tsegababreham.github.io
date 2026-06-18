@@ -1,29 +1,198 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Tsegab Portfolio</title>
-  <style>
-    body {
-      font-family: Arial;
-      margin: 50px;
-      max-width: 800px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tsegab | Portfolio</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-  <h1>Tsegab Moges</h1>
-  <p>Student Developer | Systems Programming | OS Development</p>
 
-  <h2>Projects</h2>
+  <!-- HERO -->
+  <header class="hero">
+    <nav class="nav">
+      <div class="logo">My Portfolio</div>
+      <div class="nav-links">
+        <a href="#projects">Projects</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+    </nav>
 
-  <h3>Operating System Kernel</h3>
-  <p>Custom x86 OS kernel written in C with paging, multitasking, and interrupts.</p>
+    <section class="hero-content">
+      <p class="eyebrow">Student Developer and Aspiring Software Engineer</p>
+      <h1>Building low-level systems and practical software projects.</h1>
+      <p class="hero-text">
+        I design operating systems, programming languages, CPU architectures, and web apps.
+      </p>
 
-  <h3>CPU Architecture (Logisim)</h3>
-  <p>Designed a custom 32-bit CPU architecture and emulator.</p>
+      <div class="hero-actions">
+        <a class="button primary" href="#projects">View Projects</a>
+      </div>
+    </section>
+  </header>
 
-  <h3>Amharic Programming Language</h3>
-  <p>Interpreted language in Python using Amharic syntax.</p>
+  <!-- PROJECTS -->
+  <main>
+    <section class="section" id="projects">
+      <div class="section-head">
+        <h2>Projects</h2>
+      </div>
+
+      <div class="grid">
+
+        <!-- CARD 1 -->
+        <div class="card"
+          data-title="Custom Operating System Kernel"
+          data-desc="Built an x86 kernel in C with paging, multitasking, interrupts, and a GUI powered by LVGL."
+          data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          data-link="https://github.com/TsegabAbreham/TsegabOS">
+
+          <img src="assets/TsegabOS.png" />
+          <div class="card-body">
+            <h3>Custom OS Kernel</h3>
+            <p>Built an x86 kernel with memory managment, paging, and multitasking.</p>
+            <span>Systems</span>
+          </div>
+        </div>
+
+        <!-- CARD 2 -->
+        <div class="card"
+          data-title="Amharic Programming Language"
+          data-desc="Interpreter built in Python using Amharic syntax aimed at making programming accessible."
+          data-images="assets/Abyslang.png,assets/Abyslang2.png"
+          data-video=""
+          data-link="https://github.com/TsegabAbreham/Abyssinia-Lang/tree/master">
+
+          <img src="https://raw.githubusercontent.com/TsegabAbreham/Abyssinia-Lang/refs/heads/master/abyss.ico" />
+          <div class="card-body">
+            <h3>Amharic Language</h3>
+            <p>Interpreter with custom syntax in Python.</p>
+            <span>Language</span>
+          </div>
+        </div>
+
+        <!-- CARD 3 -->
+        <div class="card"
+          data-title="Movie Website"
+          data-desc="Movie/TV show website with progress saving, profile creation, age restriction, and a watch-togther feature where two people from different places sync up and watch the same movie at the same time. Live demo: https://tamovieapp.onrender.com/"
+          data-images="assets/movie.png,assets/movie1.png"
+          data-video=""
+          data-link="https://github.com/TsegabAbreham/MovieApp">
+
+          <img src="https://raw.githubusercontent.com/TsegabAbreham/MovieApp/refs/heads/main/app/favicon.ico" />
+          <div class="card-body">
+            <h3>Movie Website</h3>
+            <p>A Movie/tv show watching website</p>
+            <span>Language</span>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section about" id="about">
+      <h2>About</h2>
+      <p>I am a student developer focused on OS, compilers, and systems programming.</p>
+    </section>
+
+    <section class="section contact" id="contact">
+      <h2>Contact</h2>
+      <p>Email: devtsegab@email.com</p>
+      <p>GitHub: github.com/TsegabAbreham</p>
+    </section>
+  </main>
+
+  <!-- MODAL -->
+  <div class="modal" id="modal">
+    <div class="modal-box">
+
+      <button class="close" id="closeBtn">&times;</button>
+
+      <h2 id="mTitle"></h2>
+      <p class="meta" id="mCategory"></p>
+      <p id="mDesc"></p>
+
+      <i><a id="mLink" target="_blank" style="color:blue;">Open Project</a></i>
+
+      <div class="gallery" id="mGallery"></div>
+
+      <iframe id="mVideo" allowfullscreen></iframe>
+
+    </div>
+  </div>
+
+  <script>
+    const cards = document.querySelectorAll(".card");
+
+    const modal = document.getElementById("modal");
+    const closeBtn = document.getElementById("closeBtn");
+
+    const mTitle = document.getElementById("mTitle");
+    const mCategory = document.getElementById("mCategory");
+    const mDesc = document.getElementById("mDesc");
+    const mGallery = document.getElementById("mGallery");
+    const mVideo = document.getElementById("mVideo");
+    const mLink = document.getElementById("mLink");
+
+    function openModal(card) {
+      mTitle.textContent = card.dataset.title;
+      mCategory.textContent = card.dataset.category || "";
+      mDesc.textContent = card.dataset.desc || "";
+
+      // LINK SAFE HANDLING
+      if (card.dataset.link) {
+        mLink.style.display = "inline-block";
+        mLink.href = card.dataset.link;
+      } else {
+        mLink.style.display = "none";
+      }
+
+      // IMAGES
+      mGallery.innerHTML = "";
+      const images = (card.dataset.images || "").split(",");
+
+      images.forEach(src => {
+        if (!src.trim()) return;
+        const img = document.createElement("img");
+        img.src = src.trim();
+        mGallery.appendChild(img);
+      });
+
+      // VIDEO
+      if (card.dataset.video) {
+        mVideo.style.display = "block";
+        mVideo.src = card.dataset.video;
+      } else {
+        mVideo.style.display = "none";
+        mVideo.src = "";
+      }
+
+      modal.classList.add("active");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal() {
+      modal.classList.remove("active");
+      mVideo.src = "";
+      document.body.style.overflow = "";
+    }
+
+    cards.forEach(card => {
+      card.addEventListener("click", () => openModal(card));
+    });
+
+    closeBtn.addEventListener("click", closeModal);
+
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+  </script>
+
 </body>
 </html>
