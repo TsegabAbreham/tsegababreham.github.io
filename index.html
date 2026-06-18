@@ -46,13 +46,13 @@
         <div class="card"
           data-title="Custom Operating System Kernel"
           data-desc="Built an x86 kernel in C with paging, multitasking, interrupts, and a GUI powered by LVGL."
-          data-video="https://www.youtube.com/embed/dQw4w9WgXcQ"
+          data-video="assets/demoOS.mp4"
           data-link="https://github.com/TsegabAbreham/TsegabOS">
 
           <img src="assets/TsegabOS.png" />
           <div class="card-body">
             <h3>Custom OS Kernel</h3>
-            <p>Built an x86 kernel with memory managment, paging, and multitasking.</p>
+            <p>Built an x86 kernel with memory management, paging, and multitasking.</p>
             <span>Systems</span>
           </div>
         </div>
@@ -62,7 +62,6 @@
           data-title="Amharic Programming Language"
           data-desc="Interpreter built in Python using Amharic syntax aimed at making programming accessible. The programming language name is Abyssinia Lang."
           data-images="assets/Abyslang.png,assets/Abyslang2.png"
-          data-video=""
           data-link="https://github.com/TsegabAbreham/Abyssinia-Lang/tree/master">
 
           <img src="https://raw.githubusercontent.com/TsegabAbreham/Abyssinia-Lang/refs/heads/master/abyss.ico" />
@@ -76,15 +75,14 @@
         <!-- CARD 3 -->
         <div class="card"
           data-title="Movie Website"
-          data-desc="Movie/TV show website with progress saving, profile creation, age restriction, and a watch-togther feature where two people from different places sync up and watch the same movie at the same time. Live demo: https://tamovieapp.onrender.com/"
+          data-desc="Movie/TV show website with progress saving, profile creation, age restriction, and watch-together feature."
           data-images="assets/movie.png,assets/movie1.png"
-          data-video=""
           data-link="https://github.com/TsegabAbreham/MovieApp">
 
           <img src="https://raw.githubusercontent.com/TsegabAbreham/MovieApp/refs/heads/main/app/favicon.ico" />
           <div class="card-body">
             <h3>Movie Website</h3>
-            <p>A Movie/tv show watching website</p>
+            <p>A Movie/TV show watching website</p>
             <span>Website</span>
           </div>
         </div>
@@ -92,15 +90,14 @@
         <!-- CARD 4 -->
         <div class="card"
           data-title="Custom 32-bit CPU Architecture"
-          data-desc="A custom CPU architecture made from scratch in Logisim and later made in Verilog to be embedded into FPGA systems. "
+          data-desc="CPU designed in Logisim and implemented in Verilog for FPGA systems."
           data-images="assets/cpulogisim.png"
-          data-video=""
           data-link="https://github.com/TsegabAbreham/Custom-32-Bit-CPU">
 
           <img src="assets/cpu.png" />
           <div class="card-body">
             <h3>Custom 32-bit CPU Architecture</h3>
-            <p>A custom CPU architecture made from scratch in Logisim and later made in Verilog to be embedded into FPGA systems.</p>
+            <p>Designed and implemented a CPU from scratch.</p>
             <span>Hardware</span>
           </div>
         </div>
@@ -110,7 +107,10 @@
 
     <section class="section about" id="about">
       <h2>About</h2>
-      <p>I am a student developer focused on OS, compilers, and systems programming, game development, and website developmet. I am currently a student at American International School of Ethiopia and is currently a rising juinor.</p>
+      <p>
+        I am a student developer focused on OS, compilers, systems programming, game development,
+        and web development. I study at AIS Ethiopia and am currently a rising junior.
+      </p>
     </section>
 
     <section class="section contact" id="contact">
@@ -127,14 +127,13 @@
       <button class="close" id="closeBtn">&times;</button>
 
       <h2 id="mTitle"></h2>
-      <p class="meta" id="mCategory"></p>
       <p id="mDesc"></p>
 
-      <i><a id="mLink" target="_blank" style="color:blue;">Open Project</a></i>
+      <a id="mLink" target="_blank" style="color:blue;">Open Project</a>
 
       <div class="gallery" id="mGallery"></div>
 
-      <iframe id="mVideo" allowfullscreen></iframe>
+      <video id="mVideo" controls style="display:none; width:100%; margin-top:10px;"></video>
 
     </div>
   </div>
@@ -146,18 +145,16 @@
     const closeBtn = document.getElementById("closeBtn");
 
     const mTitle = document.getElementById("mTitle");
-    const mCategory = document.getElementById("mCategory");
     const mDesc = document.getElementById("mDesc");
     const mGallery = document.getElementById("mGallery");
     const mVideo = document.getElementById("mVideo");
     const mLink = document.getElementById("mLink");
 
     function openModal(card) {
-      mTitle.textContent = card.dataset.title;
-      mCategory.textContent = card.dataset.category || "";
+      mTitle.textContent = card.dataset.title || "";
       mDesc.textContent = card.dataset.desc || "";
 
-      // LINK SAFE HANDLING
+      // LINK
       if (card.dataset.link) {
         mLink.style.display = "inline-block";
         mLink.href = card.dataset.link;
@@ -167,12 +164,14 @@
 
       // IMAGES
       mGallery.innerHTML = "";
-      const images = (card.dataset.images || "").split(",");
+      const images = (card.dataset.images || "")
+        .split(",")
+        .map(i => i.trim())
+        .filter(Boolean);
 
       images.forEach(src => {
-        if (!src.trim()) return;
         const img = document.createElement("img");
-        img.src = src.trim();
+        img.src = src;
         mGallery.appendChild(img);
       });
 
@@ -180,6 +179,7 @@
       if (card.dataset.video) {
         mVideo.style.display = "block";
         mVideo.src = card.dataset.video;
+        mVideo.load();
       } else {
         mVideo.style.display = "none";
         mVideo.src = "";
@@ -191,6 +191,7 @@
 
     function closeModal() {
       modal.classList.remove("active");
+      mVideo.pause();
       mVideo.src = "";
       document.body.style.overflow = "";
     }
